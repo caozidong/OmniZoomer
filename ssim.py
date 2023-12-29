@@ -36,7 +36,7 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True, ordinary=
 
     ssim_map = ((2*mu1_mu2 + C1)*(2*sigma12 + C2))/((mu1_sq + mu2_sq + C1)*(sigma1_sq + sigma2_sq + C2))
 
-    mw = np.load('/home/ps/data/zidongcao/lte/mw.npy')
+    mw = np.load('/home/ps/data/zidongcao/OmniZoomer/mw.npy')
     mw = torch.from_numpy(mw).cuda()
 
     ws_SSIM = torch.sum(ssim_map * mw) / (torch.sum(mw) + 1e-4)
@@ -69,7 +69,7 @@ class SSIM(torch.nn.Module):
 
         return _ssim(img1, img2, window, self.window_size, channel, self.size_average)
 
-def ssim(img1, img2, window_size = 11, size_average = True, ordinary = True):
+def ssim(img1, img2, window_size = 11, size_average = True, ordinary = False):
     '''Ordinary: If True, calculate SSIM for the common SR task.
                  If False, calculate SSIM for the Mobius SR task.'''
     if ordinary:

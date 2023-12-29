@@ -71,8 +71,8 @@ def eval_psnr(loader, model, data_norm=None, eval_type=None, eval_bsize=None, wi
 
         inp = (batch['inp'] - inp_sub) / inp_div
 
-        M = torch.load('./' + str(idx).zfill(3) + '.pt').cuda()
-
+        M = torch.load('/home/ps/data/zidongcao/OmniZoomer/odisr_mobius/' + str(idx).zfill(3) + '.pt').cuda()
+       
         '''For testing common SR task'''
         # M = torch.tensor([[1, 0], [0, 1]], dtype=torch.complex128).cuda()
         

@@ -43,6 +43,8 @@ python demo.py --input [] --scale [] --output [] --gpu 0
 python demo.py --input [] --model [] --scale [] --output [] --gpu 0
 ```
 
+- We currently support two types of Mobius transformation, i.e., the north pole and the equator. You can spefify it in the Line 48 of the demo.py.
+
 ## Evaluation
 
 1. Download ODIM dataset
@@ -92,3 +94,8 @@ We sincerely thank the following open-source works!
 - [LIIF](https://github.com/yinboc/liif): An implicit super-resolution method
 - [LTE](https://github.com/jaewon-lee-b/lte): An implicit super-resolution method in the Fourier space
 - [Mobius transformation (Numpy version)](https://github.com/henryseg/spherical_image_editing)
+
+## Other links
+
+- This [video](https://www.youtube.com/watch?v=oVwmF_vrZh0) could better understand the Mobius transformation.
+- A online [app](https://community.theta360.guide/t/apply-rotation-and-zoom-to-stills-in-seconds-other-mobius-transformations-too/1479) that supports to update your own panoramas for transformation.
