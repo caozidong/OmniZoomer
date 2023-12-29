@@ -187,7 +187,7 @@ def calc_psnr_ws(sr, hr, dataset=None, scale=1, rgb_range=1):
     hr_y = rgb2y(hr.cpu().data).numpy()
     # sr_y = sr.cpu().numpy()
     # hr_y = hr.cpu().numpy()
-    mw = np.load('/home/ps/data/zidongcao/OmniZoomer/mw.npy')
+    mw = np.load('./mw.npy')
     ws_mse = getGlobalWSMSEValue(hr_y, sr_y, mw)
 
     return 20 * math.log10(255.0 / math.sqrt(ws_mse))
@@ -197,7 +197,7 @@ class WS_L1Loss(nn.Module):
         super(WS_L1Loss, self).__init__()
 
     def forward(self, pred, gt):
-        weight = np.load('/home/ps/data/zidongcao/lte/mw.npy')
+        weight = np.load('./mw.npy')
         weight = torch.from_numpy(weight).expand(pred.shape[0], *weight.shape) \
                     .permute(0, 2, 3, 1).view(pred.shape).cuda()
         l1_loss = torch.abs(pred - gt)
@@ -210,7 +210,7 @@ class M_L1Loss(nn.Module):
         super(M_L1Loss, self).__init__()
 
     def forward(self, pred, gt, coord_t):
-        weight = np.load('/home/ps/data/zidongcao/lte/mw.npy')
+        weight = np.load('./mw.npy')
         weight = torch.from_numpy(weight).expand(pred.shape[0], *weight.shape).to(torch.float32).cuda()
         m_weight = F.grid_sample(
                     weight, coord_t.flip(-1).unsqueeze(1),

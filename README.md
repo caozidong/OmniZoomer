@@ -29,55 +29,66 @@ Our code is based on LIIF, and the basic requirements include:
 - TensorboardX
 - yaml, numpy, tqdm, imageio
 
-## Quick Start
+## Quick demo for the transformation
 
-1. Down ODIM dataset
+- Without pre-trained models, just try the Mobius transformation:
 
-- Our constructed ODIM dataset is based on ODI-SR dataset proposed by LAU-Net.
+```
+python demo.py --input [] --scale [] --output [] --gpu 0
+```
 
-1. Download pre-trained models on ODIM dataset.
+- With pre-trained models, try the Mobius transformation:
 
-Model|File size|Download
+```
+python demo.py --input [] --model [] --scale [] --output [] --gpu 0
+```
+
+## Evaluation
+
+1. Download ODIM dataset
+
+- Our constructed ODIM dataset is based on ODI-SR dataset proposed by [LAU-Net](https://github.com/wangh-allen/LAU-Net). You can download the ODI-SR dataset in the following link:
+
+```
+https://drive.google.com/drive/folders/1w7m1r-yCbbZ7_xMGzb6IBplPe4c89rH9?usp=sharing
+```
+
+Please note that the training set of ODI-SR contains 9 panoramas whose spatial resolution is not 1024x2048. In our training process, we delete these 9 panoramas.
+
+- Then, please download the transformation matrices (Total number of 100) in our ODIM dataset in this link:
+
+```
+https://drive.google.com/drive/folders/1QbR-8JoqcytY5T1uXPFEmgzu05q44-GH?usp=drive_link
+```
+
+2. Download pre-trained models on ODIM dataset. We also provide the updated models in our journal version, called OmniVR.
+
+Model|Up-sampling factor|File size|Download
 :-:|:-:|:-:
-EDSR-baseline-LIIF|18M|[Dropbox](https://www.dropbox.com/s/6f402wcn4v83w2v/edsr-baseline-liif.pth?dl=0) &#124; [Google Drive](https://drive.google.com/file/d/1wBHSrgPLOHL_QVhPAIAcDC30KSJLf67x/view?usp=sharing)
-RDN-LIIF|256M|[Dropbox](https://www.dropbox.com/s/mzha6ll9kb9bwy0/rdn-liif.pth?dl=0) &#124; [Google Drive](https://drive.google.com/file/d/1xaAx6lBVVw_PJ3YVp02h3k4HuOAXcUkt/view?usp=sharing)
+OmniZoomer-RCAN|x8|184M|[Google Drive](https://drive.google.com/drive/folders/122iMokJZNrmsUP1-NBRaElzqR5wcs0Pa?usp=sharing)
+OmniZoomer-RCAN|x16|186M|[Google Drive](https://drive.google.com/drive/folders/123-vujUO-9AsD_mTgdGkNBBUkzhLbqB-?usp=sharing)
+OmniVR-RCAN|x8|184M|[Google Drive](https://drive.google.com/drive/folders/127D6fyQRH134EjTfCYj0mVtiEIarNQaP?usp=sharing)
+OmniVR-RCAN|x16|186M|[Google Drive](https://drive.google.com/drive/folders/12Lgd8v7RHh1bv4BBBVzVNnYcCrNRxRtY?usp=sharing)
 
-2. Convert your image to LIIF and present it in a given resolution (with GPU 0, `[MODEL_PATH]` denotes the `.pth` file)
+3. Download the ERP weights for WS-PSNR and WS-SSIM.
+
+- It can be skipped by following the evaluation metric in [LAU-Net](https://github.com/wangh-allen/LAU-Net). However, it could be very slow due to repetitive calculations. We recommend to download the weights file (.npy) in the follwing link:
+
 
 ```
-python demo.py --input xxx.png --model [MODEL_PATH] --resolution [HEIGHT],[WIDTH] --output output.png --gpu 0
+https://drive.google.com/drive/folders/12ahw3N2p9t8w67L4LDRzrMZb_VH42_Sp?usp=sharing
 ```
 
-## Reproducing Experiments
+4. Run the following code (Take ODI-SR dataset and x8 up-sample for example):
 
-### Data
+```
+python test.py --config configs/test-osr/test-osr-8.yaml --model save/_OmniZoomer_rcan-x8/epoch-best.pth --gpu 0
+```
 
-`mkdir load` for putting the dataset folders.
+## Acknowledgement
 
-- **DIV2K**: `mkdir` and `cd` into `load/div2k`. Download HR images and bicubic validation LR images from [DIV2K website](https://data.vision.ee.ethz.ch/cvl/DIV2K/) (i.e. [Train_HR](http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_train_HR.zip), [Valid_HR](http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_HR.zip), [Valid_LR_X2](http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_LR_bicubic_X2.zip), [Valid_LR_X3](http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_LR_bicubic_X3.zip), [Valid_LR_X4](http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_LR_bicubic_X4.zip)). `unzip` these files to get the image folders.
+We sincerely thank the following open-source works!
 
-- **benchmark datasets**: `cd` into `load/`. Download and `tar -xf` the [benchmark datasets](https://cv.snu.ac.kr/research/EDSR/benchmark.tar) (provided by [this repo](https://github.com/thstkdgus35/EDSR-PyTorch)), get a `load/benchmark` folder with sub-folders `Set5/, Set14/, B100/, Urban100/`.
-
-- **celebAHQ**: `mkdir load/celebAHQ` and `cp scripts/resize.py load/celebAHQ/`, then `cd load/celebAHQ/`. Download and `unzip` data1024x1024.zip from the [Google Drive link](https://drive.google.com/drive/folders/11Vz0fqHS2rXDb5pprgTjpD7S2BAJhi1P?usp=sharing) (provided by [this repo](github.com/suvojit-0x55aa/celebA-HQ-dataset-download)). Run `python resize.py` and get image folders `256/, 128/, 64/, 32/`. Download the [split.json](https://www.dropbox.com/s/2qeijojdjzvp3b9/split.json?dl=0).
-
-### Running the code
-
-**0. Preliminaries**
-
-- For `train_liif.py` or `test.py`, use `--gpu [GPU]` to specify the GPUs (e.g. `--gpu 0` or `--gpu 0,1`).
-
-- For `train_liif.py`, by default, the save folder is at `save/_[CONFIG_NAME]`. We can use `--name` to specify a name if needed.
-
-- For dataset args in configs, `cache: in_memory` denotes pre-loading into memory (may require large memory, e.g. ~40GB for DIV2K), `cache: bin` denotes creating binary files (in a sibling folder) for the first time, `cache: none` denotes direct loading. We can modify it according to the hardware resources before running the training scripts.
-
-**1. DIV2K experiments**
-
-**Train**: `python train_liif.py --config configs/train-div2k/train_edsr-baseline-liif.yaml` (with EDSR-baseline backbone, for RDN replace `edsr-baseline` with `rdn`). We use 1 GPU for training EDSR-baseline-LIIF and 4 GPUs for RDN-LIIF.
-
-**Test**: `bash scripts/test-div2k.sh [MODEL_PATH] [GPU]` for div2k validation set, `bash scripts/test-benchmark.sh [MODEL_PATH] [GPU]` for benchmark datasets. `[MODEL_PATH]` is the path to a `.pth` file, we use `epoch-last.pth` in corresponding save folder.
-
-**2. celebAHQ experiments**
-
-**Train**: `python train_liif.py --config configs/train-celebAHQ/[CONFIG_NAME].yaml`.
-
-**Test**: `python test.py --config configs/test/test-celebAHQ-32-256.yaml --model [MODEL_PATH]` (or `test-celebAHQ-64-128.yaml` for another task). We use `epoch-best.pth` in corresponding save folder.
+- [LIIF](https://github.com/yinboc/liif): An implicit super-resolution method
+- [LTE](https://github.com/jaewon-lee-b/lte): An implicit super-resolution method in the Fourier space
+- [Mobius transformation (Numpy version)](https://github.com/henryseg/spherical_image_editing)
