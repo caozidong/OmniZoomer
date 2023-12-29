@@ -64,7 +64,7 @@ https://drive.google.com/drive/folders/1QbR-8JoqcytY5T1uXPFEmgzu05q44-GH?usp=dri
 2. Download pre-trained models on ODIM dataset. We also provide the updated models in our journal version, called OmniVR.
 
 Model|Up-sampling factor|File size|Download
-:-:|:-:|:-:
+:-:|:-:|:-:|:-:
 OmniZoomer-RCAN|x8|184M|[Google Drive](https://drive.google.com/drive/folders/122iMokJZNrmsUP1-NBRaElzqR5wcs0Pa?usp=sharing)
 OmniZoomer-RCAN|x16|186M|[Google Drive](https://drive.google.com/drive/folders/123-vujUO-9AsD_mTgdGkNBBUkzhLbqB-?usp=sharing)
 OmniVR-RCAN|x8|184M|[Google Drive](https://drive.google.com/drive/folders/127D6fyQRH134EjTfCYj0mVtiEIarNQaP?usp=sharing)
