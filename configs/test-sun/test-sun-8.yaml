@@ -1,0 +1,15 @@
+test_dataset:
+  dataset:
+    name: paired-image-folders
+    args:
+      root_path_1: /home/ps/data/zidongcao/Dataset/lau_dataset/sun_test/LR/X8
+      root_path_2: /home/ps/data/zidongcao/Dataset/lau_dataset/sun_test/HR
+  wrapper:
+    name: sr-paired
+    args: {}
+  batch_size: 1
+eval_type: osr-8
+
+data_norm:
+  inp: {sub: [0.5], div: [0.5]}
+  gt: {sub: [0.5], div: [0.5]}
